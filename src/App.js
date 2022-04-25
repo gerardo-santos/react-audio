@@ -44,15 +44,17 @@ const App = () => {
       setIsRecording(false)
     }).catch((e) => console.log(e));
   }
+
   return (
     <div>
-      <h1>hola</h1>
+      <h1>Record a Voice Note</h1>
       <button onClick={start} disabled={isRecording}>
         Record
       </button>
       <button onClick={stop} disabled={!isRecording}>
         Stop
       </button>
+      <br/><br/>
       <audio src={blobUrl} controls="controls" />
     </div>
   );
