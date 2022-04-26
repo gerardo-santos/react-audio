@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MicRecorder from 'mic-recorder-to-mp3';
 
 const App = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [blobUrl, setBlobUrl] = useState('');
   const [isBlocked, setIsBlocked] = useState(false);
-  const [mp3Recorder, setMp3Recorder] = useState(new MicRecorder({ bitRate: 128 }));
-
-  console.log(setMp3Recorder);
+  const mp3Recorder = useRef(null);
 
   useEffect(() => {
     navigator.getUserMedia({ audio: true },
@@ -20,13 +18,14 @@ const App = () => {
         setIsBlocked(true);
       },
     );
+    mp3Recorder.current = new MicRecorder({bitRate: 128});
   }, [])
 
   const start = () => {
     if (isBlocked) {
       console.log('Permission Denied');
     } else {
-      mp3Recorder
+      mp3Recorder.current
         .start()
         .then(() => {
           setIsRecording(true)
@@ -35,7 +34,7 @@ const App = () => {
   }
 
   const stop = () => {
-    mp3Recorder
+    mp3Recorder.current
     .stop()
     .getMp3()
     .then(([buffer, blob]) => {
